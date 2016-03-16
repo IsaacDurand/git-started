@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import treeData from './../AnimationData/treeStructure';
+import Tree from './Tree';
 var d3 = require('d3');
 var ReactDOM = require('react-dom');
 var _ = require('lodash');
@@ -14,6 +15,29 @@ export default class Animation extends Component {
       treeData: treeData
     }
   }
+
+  render() {
+    return (
+      <div id='Animation'>
+        <svg>
+          <g className='tree-container'>
+          <text>Insert paths here</text>
+          <Tree treeData={this.state.treeData} />
+          </g>
+        </svg>
+      </div>
+    )
+  }
+}
+
+  // return (
+  //   <div id='Animation'>
+  //     Animation
+  //     <svg ref="treeRender"></svg>
+  //   </div>
+  // )
+
+  /* Commenting out old code for now
 
   componentDidMount(){
     // mountNode grabs the DOM element corresponding to this.refs.treeRender.
@@ -65,6 +89,7 @@ export default class Animation extends Component {
   // Note from Isaac: ref is a special attribute provided by React: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-string-attribute.
   // We're giving the svg element a ref attribute of 'treeRender' so that our lifecycle methods can access it, but I'm not sure we need to do this.
 }
+*/
 
 var renderTree = function(treeData, svgDomNode) {
 
