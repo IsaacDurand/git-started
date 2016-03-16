@@ -4,6 +4,7 @@ var d3 = require('d3');
 var ReactDOM = require('react-dom');
 var _ = require('lodash');
 
+// Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
 export default class Animation extends Component {
 
@@ -15,6 +16,9 @@ export default class Animation extends Component {
   }
 
   componentDidMount(){
+    // mountNode grabs the DOM element corresponding to this.refs.treeRender.
+    // 'this' is Animation, and this.refs.treeRender is the SVG  element.
+    // Avoid using findDOMNode if possible: https://facebook.github.io/react/docs/top-level-api.html
     var mountNode = ReactDOM.findDOMNode(this.refs.treeRender);
     // Render the tree usng d3 after first component mount
     renderTree(this.state.treeData, mountNode);
@@ -58,6 +62,8 @@ export default class Animation extends Component {
       </div>
     )
   }
+  // Note from Isaac: ref is a special attribute provided by React: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-string-attribute.
+  // We're giving the svg element a ref attribute of 'treeRender' so that our lifecycle methods can access it, but I'm not sure we need to do this.
 }
 
 var renderTree = function(treeData, svgDomNode) {
@@ -69,23 +75,29 @@ var renderTree = function(treeData, svgDomNode) {
     var i = 0,
       duration = 450,
       root;
-      console.log(svgDomNode);
+      // console.log('svgDomNode passed to renderTree', svgDomNode);
     // Cleans up the SVG on re-render
     d3.select(svgDomNode).selectAll("*").remove();
 
+    // Create a tree layout of the specified size
     var tree = d3.layout.tree()
       .size([height, width]);
 
+    // Create a new 'diagonal generator' with a projection that reverses the x and y coordinates?
     var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
 
+    // Grab the svg element on the DOM (using d3.select(node) rather than d3.select(selector)), update its width and height.
     var svg = d3.select(svgDomNode)
       .attr("width", width + margin.right + margin.left)
       .attr("height", height + margin.top + margin.bottom)
-      .append("g")
+    // Append a g element to the SVG element and set its transform attribute to the specified translate value.
+      .append("g") // Returns the newly appended <g> element
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    // root grabs the first element of treeData - the current directory
     root = treeData[0];
+    // Set the baseline x and y coordinate data for the root? (I'm not seeing a change in the root's x0 and y0 attributes before and after the following two lines of code.)
     root.x0 = height / 2;
     root.y0 = 0;
 
@@ -94,14 +106,22 @@ var renderTree = function(treeData, svgDomNode) {
     function update(source) {
 
       // Compute the new tree layout.
-      var nodes = tree.nodes(root).reverse(),
+      var nodes = tree.nodes(root).reverse(), // Why are we reversing this array?
+      // nodes is an array of the child nodes of root. It looks like it also includes the root itself.
         links = tree.links(nodes);
+        // links is an array with one element for each child.
+      console.log('nodes:', nodes);
+      // console.log('links:', links);
 
       // Normalize for fixed-depth.
+      // Set the y-coordinate for each node based on the node's depth (its 'level' in the tree).
       nodes.forEach(function(d) { d.y = d.depth * 180; });
 
       // Update the nodes…
+      // node
       var node = svg.selectAll("g.node")
+      // node is a selection of all the <g> elements with a class of node (basically, all the circles on the svg). Do these exist the first time this function is called?
+        // Bind this selection (node) to the data in nodes, giving each a unique key?
         .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
       // Enter any new nodes at the parent's previous position.
@@ -109,6 +129,8 @@ var renderTree = function(treeData, svgDomNode) {
         .attr("class", "node")
         .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
         .on("click", click);
+      // nodeEnter is a selection of newly appended <g> elements
+      // It looks like node.enter() is pretty much the same thing, but with the addition of an update method we don't need.
 
       nodeEnter.append("circle")
         .attr("r", 1e-6)
@@ -125,6 +147,9 @@ var renderTree = function(treeData, svgDomNode) {
       var nodeUpdate = node.transition()
         .duration(duration)
         .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+      // It looks like nodeEnter and nodeUpdate contain the same nodes: all the nodes on the screen. Is this what we want? Shouldn't nodeEnter be only incoming nodes and nodeUpdate be only persistent nodes?
+      // console.log('nodeEnter:', nodeEnter);
+      // console.log('nodeUpdate:', nodeUpdate);
 
       nodeUpdate.select("circle")
         .attr("r", 10)
@@ -139,12 +164,14 @@ var renderTree = function(treeData, svgDomNode) {
         .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
         .remove();
 
+      // Why aren't we removing these circle and text selections?
       nodeExit.select("circle")
         .attr("r", 1e-6);
 
       nodeExit.select("text")
         .style("fill-opacity", 1e-6);
 
+      // Note from Isaac: I haven't looked at the links section yet. These must be the lines connecting the circles on the screen.
       // Update the links…
       var link = svg.selectAll("path.link")
         .data(links, function(d) { return d.target.id; });
@@ -179,6 +206,7 @@ var renderTree = function(treeData, svgDomNode) {
     }
 
     // Toggle children on click.
+    // More specifically, show/hide children when you click the root.
     function click(d) {
       if (d.children) {
       d._children = d.children;

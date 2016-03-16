@@ -34,6 +34,7 @@ var currDir;
 //
 	mainWindow.webContents.on('did-finish-load', function() {
 	mainWindow.webContents.send('term-start-data', process.env.HOME + ' $ ');
+	mainWindow.webContents.send('curr-dir', process.env.HOME);
 });
 
 	// sets the terminal prompt to pwd

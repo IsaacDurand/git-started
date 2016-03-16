@@ -60,7 +60,7 @@ export default class Dashboard extends Component {
 			lesson1[this.state.slideNumber].buttonFunction();
 			// Listen for the result of the test triggered by buttonFunction (since I can't get the buttonFunction to return a Boolean, which would be simpler). I changed .on to .once
 			ipcRenderer.once('test-result-2', function(event, arg) { // Refactoring opportunity: pull out and name this function.
-				console.log(`Test result for slide ${this.state.slideNumber}: ${arg}`);
+				// console.log(`Test result for slide ${this.state.slideNumber}: ${arg}`);
 				// If the user passed the test (if arg is true), advance.
 				if (arg) {
 					this.advance();
