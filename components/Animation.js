@@ -22,11 +22,16 @@ class V3Animation extends Component {
       node.id = index + 1;
       return node;
     });
-    console.log('nodes:', nodes); // This looks good, but I need an id.
-    // I'll want to give each tree a node object with 'children' and 'name' properties.
+    console.log('nodes:', nodes);
+
+    // Delete this model code
+    var expenses = expensesData && expensesData.map((expense) => {
+    // go through all data and return components keyed by id
+    return (<ExpenseComponent key={expense.id} data={expense} />);}
+
     var paths = [];
-    var trees = [];
-    // To build trees, should I use this.state.treeData or an array created by D3?
+    var trees = nodes && START HERE;
+
     return(
       <div id='Animation'>
         <svg>
