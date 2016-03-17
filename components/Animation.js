@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-export default class Animation extends Component {
+class NewAnimation extends Component {
 
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ export default class Animation extends Component {
 }
 
 // This is the class we exported previously
-class OldAnimation extends Component {
+export default class Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -118,10 +118,12 @@ var renderTree = function(treeData, svgDomNode) {
     // Create a tree layout of the specified size
     var tree = d3.layout.tree()
       .size([height, width]);
+    // console.log('tree:', tree);
 
     // Create a new 'diagonal generator' with a projection that reverses the x and y coordinates?
     var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
+    // console.log('diagonal:', diagonal);
 
     // Grab the svg element on the DOM (using d3.select(node) rather than d3.select(selector)), update its width and height.
     var svg = d3.select(svgDomNode)
@@ -158,7 +160,10 @@ var renderTree = function(treeData, svgDomNode) {
       var node = svg.selectAll("g.node")
       // node is a selection of all the <g> elements with a class of node (basically, all the circles on the svg). Do these exist the first time this function is called?
         // Bind this selection (node) to the data in nodes, giving each a unique key?
-        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+        .data(nodes, function(d) {
+          // if (i === 0) console.log('d:', d);
+          return d.id || (d.id = ++i);
+        });
 
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
