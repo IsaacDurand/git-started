@@ -6,13 +6,15 @@ var _ = require('lodash'); // Do we need this?
 
 export default class Tree extends Component {
 
+  // We can't render the treeData object, but we can render arrays.
   render() {
+    console.log('this.props.treeData:', this.props.treeData);
     return (
-      <g className='Tree'>
+      <ul className='Tree' className='change-to-g'>
         <circle></circle>
-        <text>Tree name here</text>
-        <g>Trees for any child trees go here</g>
-      </g>
-    )  
+        <li className='change-to-text'>Tree name: {this.props.treeData[0].name}</li>
+        <ul className='change-to-g'>Trees for any child trees go here - this will be an array. Am I passing down props? I think so.</ul>
+      </ul>
+    )
   }
 }

@@ -16,15 +16,16 @@ export default class Animation extends Component {
     }
   }
 
+  // Once done testing, change the inner div to a
   render() {
     return (
       <div id='Animation'>
-        <svg>
-          <g className='tree-container'>
-          <text>Insert paths here</text>
+        <div className='change-to-svg'>
+          <div className='tree-container' className='change-to-g'>
+          Insert paths here
           <Tree treeData={this.state.treeData} />
-          </g>
-        </svg>
+          </div>
+        </div>
       </div>
     )
   }
