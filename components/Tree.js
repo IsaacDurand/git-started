@@ -1,8 +1,19 @@
 import React, {Component} from 'react';
 var d3 = require('d3');
 
-
 export default class Tree extends Component {
+
+  // I think I want to use this.props.data.name instead of this.props.name...
+  render() {
+    <g class='Tree'>
+      <circle></circle>
+      <text>{this.props.data.name}</text>
+    </g>
+  }
+}
+
+// This was my first attempt at Reactifying our files/folders.
+class OldTree extends Component {
 
   // We can't render the treeData object, but we can render arrays.
   render() {

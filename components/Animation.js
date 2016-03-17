@@ -7,7 +7,41 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-class NewAnimation extends Component {
+export default class V3Animation extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      treeData: treeData
+    }
+  }
+
+  render() {
+    console.log('My new render function is running');
+    var nodes = d3.layout.tree().nodes(this.state.treeData[0]).reverse().map(function(node, index) {
+      node.id = index;
+      return node;
+    });
+    console.log('nodes:', nodes); // This looks good, but I need an id.
+    // I'll want to give each tree a node object with 'children' and 'name' properties.
+    var paths = [];
+    var trees = [];
+    // To build trees, should I use this.state.treeData or an array created by D3?
+    return(
+      <div id='Animation'>
+        <svg>
+          <g>
+            {paths}
+            {trees}
+          </g>
+        </svg>
+      </div>
+    )
+  }
+}
+
+// This was my first attempt at Reactifying our files/folders.
+class V2Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -41,7 +75,7 @@ class NewAnimation extends Component {
 }
 
 // This is the class we exported previously
-export default class Animation extends Component {
+class V1Animation extends Component {
 
   constructor(props) {
     super(props);
