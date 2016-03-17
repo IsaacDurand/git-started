@@ -21,13 +21,13 @@ export default class Animation extends Component {
     ipcRenderer.on('direc-schema', (e, arg)=>{
       // console.log('about to set state');
       this.setState({
-        treeData: arg[0]
+        treeData: arg
       })
     });
   }
 
   render() {
-    console.log('Rendering - this.state is', this.state);
+    console.log('Rendering - this.state.treeData is', this.state.treeData);
     return (
       <div id='Animation'>
         <div className='change-to-svg'>
