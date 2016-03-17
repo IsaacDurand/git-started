@@ -7,7 +7,6 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-// GET TREE TO UPDATE CORRECTLY
 export default class Animation extends Component {
 
   constructor(props) {
@@ -41,14 +40,15 @@ export default class Animation extends Component {
   }
 }
 
-  // return (
-  //   <div id='Animation'>
-  //     Animation
-  //     <svg ref="treeRender"></svg>
-  //   </div>
-  // )
+// This is the class we exported previously
+class OldAnimation extends Component {
 
-  /* Commenting out old code for now
+  constructor(props) {
+    super(props);
+    this.state = {
+      treeData: treeData
+    }
+  }
 
   componentDidMount(){
     // mountNode grabs the DOM element corresponding to this.refs.treeRender.
@@ -100,7 +100,6 @@ export default class Animation extends Component {
   // Note from Isaac: ref is a special attribute provided by React: https://facebook.github.io/react/docs/more-about-refs.html#the-ref-string-attribute.
   // We're giving the svg element a ref attribute of 'treeRender' so that our lifecycle methods can access it, but I'm not sure we need to do this.
 }
-*/
 
 var renderTree = function(treeData, svgDomNode) {
 
