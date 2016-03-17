@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-export default class V3Animation extends Component {
+class V3Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ export default class V3Animation extends Component {
   render() {
     console.log('My new render function is running');
     var nodes = d3.layout.tree().nodes(this.state.treeData[0]).reverse().map(function(node, index) {
-      node.id = index;
+      node.id = index + 1;
       return node;
     });
     console.log('nodes:', nodes); // This looks good, but I need an id.
@@ -75,7 +75,7 @@ class V2Animation extends Component {
 }
 
 // This is the class we exported previously
-class V1Animation extends Component {
+export default class V1Animation extends Component {
 
   constructor(props) {
     super(props);
