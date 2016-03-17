@@ -16,7 +16,7 @@ export default class Animation extends Component {
     }
   }
 
-  // Once done testing, change the inner div to a
+  // Maybe I should pass this.state.treeData[0] rather than this.state.treeData?
   render() {
     return (
       <div id='Animation'>
