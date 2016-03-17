@@ -101,6 +101,7 @@ class OldAnimation extends Component {
   // We're giving the svg element a ref attribute of 'treeRender' so that our lifecycle methods can access it, but I'm not sure we need to do this.
 }
 
+// svgDomNode is just our <svg> element
 var renderTree = function(treeData, svgDomNode) {
 
   var margin = {top: 0, right: 20, bottom: 0, left: 90},
