@@ -25,16 +25,16 @@ export default class Animation extends Component {
     });
   }
 
+  // Paths should be inside g.tree-container
   render() {
     console.log('Rendering - this.state.treeData is', this.state.treeData);
     return (
       <div id='Animation'>
-        <div className='change-to-svg'>
-          <div className='tree-container' className='change-to-g'>
-          Insert paths here
-          <Tree treeData={this.state.treeData[0]} />
-          </div>
-        </div>
+        <svg>
+          <g className='tree-container'>
+            <Tree treeData={this.state.treeData[0]} />
+          </g>
+        </svg>
       </div>
     )
   }

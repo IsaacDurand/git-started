@@ -12,20 +12,21 @@ export default class Tree extends Component {
     var childrenToRender;
     if (this.props.treeData.children) {
       childrenToRender = this.props.treeData.children.map((child, index) => {
-        return <li className='change-to-?' key={index}>
+        return <g key={index}>
           <Tree treeData={child} />
-        </li>
+        </g>
       });
     }
 
+    // We may not need a <g> element around childrenToRender. Or maybe we don't need the <g> element above?
     return (
-      <ul className='Tree' className='change-to-g'>
-        <span className='change-to-circle'></span>
-        <li className='change-to-text'>{this.props.treeData.name}</li>
-        <ul className='change-to-g'>
+      <g className='Tree'>
+        <circle></circle>
+        <text>{this.props.treeData.name}</text>
+        <g className='children-container'>
           {childrenToRender}
-        </ul>
-      </ul>
+        </g>
+      </g>
     )
   }
 }
