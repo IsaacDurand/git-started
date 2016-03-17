@@ -7,6 +7,7 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
+// GET TREE TO UPDATE CORRECTLY
 export default class Animation extends Component {
 
   constructor(props) {
@@ -16,7 +17,17 @@ export default class Animation extends Component {
     }
   }
 
+  componentDidMount() {
+    ipcRenderer.on('direc-schema', (e, arg)=>{
+      // console.log('about to set state');
+      this.setState({
+        treeData: arg[0]
+      })
+    });
+  }
+
   render() {
+    console.log('Rendering - this.state is', this.state);
     return (
       <div id='Animation'>
         <div className='change-to-svg'>
