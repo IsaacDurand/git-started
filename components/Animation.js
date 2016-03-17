@@ -16,14 +16,13 @@ export default class Animation extends Component {
     }
   }
 
-  // Maybe I should pass this.state.treeData[0] rather than this.state.treeData?
   render() {
     return (
       <div id='Animation'>
         <div className='change-to-svg'>
           <div className='tree-container' className='change-to-g'>
           Insert paths here
-          <Tree treeData={this.state.treeData} />
+          <Tree treeData={this.state.treeData[0]} />
           </div>
         </div>
       </div>

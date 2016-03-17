@@ -9,9 +9,9 @@ export default class Tree extends Component {
     // console.log('this.props.treeData:', this.props.treeData); // this is the entire tree
     // console.log('this.props.treeData[0].children:', this.props.treeData[0].children); // this is just the trees one level below the current tree
 
-    var children;
-    if (this.props.treeData[0].children) {
-      children = this.props.treeData[0].children.map((child, index) => {
+    var childrenToRender;
+    if (this.props.treeData.children) {
+      childrenToRender = this.props.treeData.children.map((child, index) => {
         return <li className='change-to-?' key={index}>
           <Tree treeData={child} />
         </li>
@@ -21,9 +21,9 @@ export default class Tree extends Component {
     return (
       <ul className='Tree' className='change-to-g'>
         <span className='change-to-circle'></span>
-        <li className='change-to-text'>Tree name: {this.props.treeData[0].name}</li>
+        <li className='change-to-text'>{this.props.treeData.name}</li>
         <ul className='change-to-g'>
-          {children}
+          {childrenToRender}
         </ul>
       </ul>
     )
