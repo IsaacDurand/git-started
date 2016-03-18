@@ -10,16 +10,29 @@ var _ = require('lodash');
 // I think this should live elsewhere...
 var treeVisualization = {};
 
+// **I think this stuff is actually what I want to do on Tree
 treeVisualization.enter = (selection) =>{
   console.log('in treeVisualization.enter');
+
+  // selection.selectAll("g .node")?
+  // When I changed .select to .selectAll, I get an 'undefined' error message, and no attributes are updated. Why is d undefined?
+
+  // console.log('select', selection.select('circle'));
+  // console.log('selectAll', selection.selectAll('circle')); // This seems kind of like what we want, so what's the problem?
 
   selection.select("circle")
     .attr("r", 1e-6)
     // I checked, and this style is being applied!
-    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+    .style("fill", function(d) {
+      // console.log('select circle', this); // this is <circle>
+      console.log('select d', d);
+      return d._children ? "lightsteelblue" : "#fff"; });
 
   selection.select("text")
-    .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+    .attr("x", function(d) {
+      // console.log('selectAll text', this); // this is <text>
+      // console.log('selectAll d', d); // Undefined
+      return d.children || d._children ? -13 : 13; })
     .attr("dy", ".35em")
     .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
     .text(function(d) { return d.name; })
@@ -63,15 +76,9 @@ export default class Animation extends Component {
 
   componentDidMount() {
     // I'm using this.state here. This.props is the default props.
-    // console.log('in cDU');
+    console.log('in cDU');
     // console.log('this.state', this.state);
     // console.log('this.props', this.props);
-
-    // ReactDOM.findDOMNode(this) returns <div#Animation>
-    // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
-    this.d3Node = d3.select(ReactDOM.findDOMNode(this));
-    this.d3Node.datum(this.state.treeData) // this is an array containing an array containing just the animation div
-      .call(treeVisualization.enter);
 
     // Can we use selection.select for these?
     // Update our svg's width and height.
@@ -86,6 +93,12 @@ export default class Animation extends Component {
     // Again, do we need the d3.select?
     d3.select(g)
       .attr("transform", "translate(" + this.state.margin.left + "," + this.state.margin.top + ")");
+
+    // ReactDOM.findDOMNode(this) returns <div#Animation>
+    // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
+    this.d3Node = d3.select(ReactDOM.findDOMNode(this));
+    this.d3Node.datum(this.state.treeData) // this is an array containing an array containing just the animation div
+      .call(treeVisualization.enter);
 
     // Do this stuff here? Or in helper function?
     // Set root.x0 and root.y0
