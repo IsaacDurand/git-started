@@ -7,6 +7,12 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
+// I think this should live elsewhere...
+var treeVisualization = {};
+treeVisualization.test = (selection) =>{
+  console.log('Hello to', selection);
+}
+
 export default class Animation extends Component {
 
   constructor(props) {
@@ -51,7 +57,8 @@ export default class Animation extends Component {
     // ReactDOM.findDOMNode(this) returns <div#Animation>
     // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
     this.d3Node = d3.select(ReactDOM.findDOMNode(this));
-    console.log('thing I want', this.d3Node.datum(this.state.treeData));
+    this.d3Node.datum(this.state.treeData) // this is an array containing an array containing just the animation div
+      .call(treeVisualization.test);
 
     // Update our svg's width and height.
     var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
