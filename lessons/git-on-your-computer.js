@@ -284,7 +284,7 @@ var slides = [
 
 export {slides as lesson1};
 
-/* A valuable resource for this lesson was https://github.com/jlord/git-it-electron.
+/* A valuable resource for this lesson was https://github.com/jlord/git-it-electron. (We may want to look at GitHub Desktop too.)
 Some notes on it:
 - lib/verify/ contains a file for each challenge. Each file exports a verifyXChallenge function (where X is the challenge name).
 - lib/challenge.js handles clicks on the 'Verify' button. On click, it runs the appropriate verifyXChallenge function.

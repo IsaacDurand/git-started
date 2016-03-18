@@ -5,7 +5,7 @@ export default class Tree extends Component {
 
   // I think I want to use this.props.data.name instead of this.props.name...
   render() {
-    <g class='Tree'>
+    return <g className='Tree'>
       <circle></circle>
       <text>{this.props.data.name}</text>
     </g>

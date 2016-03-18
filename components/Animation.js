@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-class V3Animation extends Component {
+export default class V3Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -17,20 +17,17 @@ class V3Animation extends Component {
   }
 
   render() {
-    console.log('My new render function is running');
+    // We should clean up the following line of code, but I think it's OK to run these D3 functions since they're aren't creating or removing DOM elements.
     var nodes = d3.layout.tree().nodes(this.state.treeData[0]).reverse().map(function(node, index) {
       node.id = index + 1;
       return node;
     });
     console.log('nodes:', nodes);
 
-    // Delete this model code
-    var expenses = expensesData && expensesData.map((expense) => {
-    // go through all data and return components keyed by id
-    return (<ExpenseComponent key={expense.id} data={expense} />);}
-
     var paths = [];
-    var trees = nodes && START HERE;
+    var trees = nodes && nodes.map((node) => {
+      return (<Tree key={node.id} data={node} />)
+    });
 
     return(
       <div id='Animation'>
@@ -80,7 +77,7 @@ class V2Animation extends Component {
 }
 
 // This is the class we exported previously
-export default class V1Animation extends Component {
+class V1Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -160,6 +157,7 @@ var renderTree = function(treeData, svgDomNode) {
     // console.log('tree:', tree);
 
     // Create a new 'diagonal generator' with a projection that reverses the x and y coordinates?
+    // The links/paths will use this diagonal - I'll ignore it for now.
     var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
     // console.log('diagonal:', diagonal);

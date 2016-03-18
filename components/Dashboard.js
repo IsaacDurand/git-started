@@ -112,6 +112,7 @@ Dashboard.defaultProps = {
 
 render(<Dashboard />, document.getElementById('dashboard-container'));
 
+// Note: React Dev Tools don't work in Electron (Electron issue 915)
 // Here's an ES5 version in case we need it later.
 
 // var React = require('react');
