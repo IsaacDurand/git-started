@@ -55,7 +55,8 @@ export default class Animation extends Component {
       .projection(function(d) { return [d.y, d.x]; });
 
     // Create an array of nodes. We will pass one node to each Tree as props.
-    var nodes = tree.nodes(this.state.treeData[0]).reverse();
+    var nodes = tree.nodes(this.state.treeData[0]).reverse(),
+      links = tree.links(nodes);
 
     var root = nodes[nodes.length - 1];
     var rootX0 = root.x;
@@ -72,7 +73,10 @@ export default class Animation extends Component {
       d.rootY0 = rootY0;
     });
 
-    var paths = [];
+    var paths = links && links.map((link) => {
+      return (<Path key={link.target.id} data={link} />)
+    });
+    
     var trees = nodes && nodes.map((node) => {
       return (<Tree key={node.id} data={node} />)
     });
