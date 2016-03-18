@@ -9,8 +9,21 @@ var _ = require('lodash');
 
 // I think this should live elsewhere...
 var treeVisualization = {};
-treeVisualization.test = (selection) =>{
-  console.log('Hello to', selection);
+
+treeVisualization.enter = (selection) =>{
+  console.log('in treeVisualization.enter');
+
+  selection.select("circle")
+    .attr("r", 1e-6)
+    // I checked, and this style is being applied!
+    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  selection.select("text")
+    .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+    .attr("dy", ".35em")
+    .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+    .text(function(d) { return d.name; })
+    .style("fill-opacity", 1e-6);
 }
 
 export default class Animation extends Component {
@@ -58,8 +71,9 @@ export default class Animation extends Component {
     // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
     this.d3Node = d3.select(ReactDOM.findDOMNode(this));
     this.d3Node.datum(this.state.treeData) // this is an array containing an array containing just the animation div
-      .call(treeVisualization.test);
+      .call(treeVisualization.enter);
 
+    // Can we use selection.select for these?
     // Update our svg's width and height.
     var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
     // Do we need the d3.select? Or can we just call .attr on svg?
