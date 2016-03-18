@@ -45,12 +45,13 @@ export default class Animation extends Component {
   componentDidMount() {
     // I'm using this.state here. This.props is the default props.
     // console.log('in cDU');
-    console.log('this.state', this.state);
-    console.log('this.props', this.props);
+    // console.log('this.state', this.state);
+    // console.log('this.props', this.props);
+
     // ReactDOM.findDOMNode(this) returns <div#Animation>
-    // Should I use a variable declaration in place of this.d3Node?
+    // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
     this.d3Node = d3.select(ReactDOM.findDOMNode(this));
-    this.d3Node.datum(this.state.treeData); // or this.props.data?
+    console.log('thing I want', this.d3Node.datum(this.state.treeData));
 
     // Update our svg's width and height.
     var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
