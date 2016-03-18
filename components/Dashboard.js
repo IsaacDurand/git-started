@@ -25,7 +25,10 @@ export default class Dashboard extends Component {
 		};
 	}
 
-
+	// componentDidMount() {
+	// 	console.log('Dasboard.state in CDU', this.state);
+	// 	console.log('Dasboard.props in CDU', this.props);
+	// }
 
 	// Helper function that advances to the next slide
 	advance() {

@@ -12,30 +12,64 @@ export default class Animation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      treeData: treeData,
+      treeData: props.initialTreeData,
       margin: props.initialMargin,
       height: 200 - props.initialMargin.top - props.initialMargin.bottom,
       width: 660 - props.initialMargin.right - props.initialMargin.left
     }
   }
 
+  // BEGIN EXAMPLE code
+  // componentDidMount() {
+  //  // wrap element in d3
+  //  // getDOMNode is deprecated and has been replaced with ReactDOM.findDOMNode().
+  //  this.d3Node = d3.select(this.getDOMNode());
+  //  this.d3Node.datum(this.props.data)
+  //   .call(ExpenseVisualization.enter);
+  // }
+  // shouldComponentUpdate(nextProps) {
+  //  if (nextProps.data.update) {
+  //   // use d3 to update component
+  //   this.d3Node.datum(nextProps.data)
+  //    .call(ExpenseVisualization.update);
+  //   return false;
+  //  }
+  //  return true;
+  // },
+  // componentDidUpate() {
+  //  this.d3Node.datum(this.props.data)
+  //   .call(ExpenseVisualization.update);
+  // },
+  //END EXAMPLE code
+
   componentDidMount() {
+    // I believe we're supposed to use this.props here, not this.state. This.props will be the default props.
     console.log('in cDU');
-    // console.log('this.props is', this.props);
-    console.log('this.state is', this.state);
+    console.log('this.state', this.state);
+    console.log('this.props', this.props);
+    // ReactDOM.findDOMNode(this) returns <div#Animation>
+    // Should I use a variable declaration in place of this.d3Node?
+    this.d3Node = d3.select(ReactDOM.findDOMNode(this));
+    this.d3Node.datum(this.props.initialTreeData); // or this.props.data?
 
     // Update our svg's width and height.
     var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
     // Do we need the d3.select? Or can we just call .attr on svg?
     d3.select(svg)
-      .attr("width", this.state.width + this.state.margin.right + this.state.margin.left)
-      .attr("height", this.state.height + this.state.margin.top + this.state.margin.bottom);
+      .attr("width", this.props.initialWidth + this.props.initialMargin.right + this.props.initialMargin.left)
+      .attr("height", this.props.initialHeight + this.props.initialMargin.top + this.props.initialMargin.bottom);
 
     // Update our main g
     var g = ReactDOM.findDOMNode(this.refs.ourMainG);
     // Again, do we need the d3.select?
     d3.select(g)
-      .attr("transform", "translate(" + this.state.margin.left + "," + this.state.margin.top + ")");
+      .attr("transform", "translate(" + this.props.initialMargin.left + "," + this.props.initialMargin.top + ")");
+
+    // Do this stuff here? Or in helper function?
+    // Set root.x0 and root.y0
+    // Set data.y for each node
+    // Select g.Trees and bind them to nodes based on d.id? Have I already done this?
+    // Update node attributes
 
     // We should avoid using findDOMNode if possible (https://facebook.github.io/react/docs/top-level-api.html), but it may be inevitable here.
   }
@@ -73,7 +107,10 @@ export default class Animation extends Component {
 }
 
 Animation.defaultProps = {
-  initialMargin: {top: 0, right: 20, bottom: 0, left: 90}
+  initialTreeData: treeData,
+  initialMargin: {top: 0, right: 20, bottom: 0, left: 90},
+  initialHeight: 200,
+  initalWidth: 550
 }
 
 // This was my first attempt at Reactifying our files/folders.
