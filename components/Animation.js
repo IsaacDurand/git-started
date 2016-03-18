@@ -7,22 +7,52 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-export default class V3Animation extends Component {
+export default class Animation extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      treeData: treeData
+      treeData: treeData,
+      margin: props.initialMargin,
+      height: 200 - props.initialMargin.top - props.initialMargin.bottom,
+      width: 660 - props.initialMargin.right - props.initialMargin.left
     }
   }
 
+  componentDidMount() {
+    console.log('in cDU');
+    // console.log('this.props is', this.props);
+    console.log('this.state is', this.state);
+
+    // Update our svg's width and height.
+    var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
+    // Do we need the d3.select? Or can we just call .attr on svg?
+    d3.select(svg)
+      .attr("width", this.state.width + this.state.margin.right + this.state.margin.left)
+      .attr("height", this.state.height + this.state.margin.top + this.state.margin.bottom);
+
+    // Update our main g
+    var g = ReactDOM.findDOMNode(this.refs.ourMainG);
+    // Again, do we need the d3.select?
+    d3.select(g)
+      .attr("transform", "translate(" + this.state.margin.left + "," + this.state.margin.top + ")");
+
+    // We should avoid using findDOMNode if possible (https://facebook.github.io/react/docs/top-level-api.html), but it may be inevitable here.
+  }
+
   render() {
-    // We should clean up the following line of code, but I think it's OK to run these D3 functions since they're aren't creating or removing DOM elements.
-    var nodes = d3.layout.tree().nodes(this.state.treeData[0]).reverse().map(function(node, index) {
+    console.log('in render');
+    // Create a tree layout of the specified size
+    // (Does this mean we're creating a new tree on each render? I think it's OK to run these D3 functions since they're aren't creating or removing DOM elements.)
+    // (Should we declare tree here or in this.state?)
+    var tree = d3.layout.tree()
+      .size([this.state.height, this.state.width]);
+
+    // Create an array of nodes. We will pass one node to each Tree as props.
+    var nodes = tree.nodes(this.state.treeData[0]).reverse().map(function(node, index) {
       node.id = index + 1;
       return node;
     });
-    console.log('nodes:', nodes);
 
     var paths = [];
     var trees = nodes && nodes.map((node) => {
@@ -31,8 +61,8 @@ export default class V3Animation extends Component {
 
     return(
       <div id='Animation'>
-        <svg>
-          <g>
+        <svg ref='ourSVG'>
+          <g ref='ourMainG'>
             {paths}
             {trees}
           </g>
@@ -40,6 +70,10 @@ export default class V3Animation extends Component {
       </div>
     )
   }
+}
+
+Animation.defaultProps = {
+  initialMargin: {top: 0, right: 20, bottom: 0, left: 90}
 }
 
 // This was my first attempt at Reactifying our files/folders.
