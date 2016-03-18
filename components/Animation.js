@@ -54,15 +54,22 @@ export default class Animation extends Component {
     var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
 
-    console.log('this.state', this.state);
-    console.log('this.state.treeData', this.state.treeData);
-    console.log('this.state.treeData[0]', this.state.treeData[0]);
-
     // Create an array of nodes. We will pass one node to each Tree as props.
     var nodes = tree.nodes(this.state.treeData[0]).reverse();
+
+    var root = nodes[nodes.length - 1];
+    var rootX0 = root.x;
+    var rootY0 = root.y;
+
     nodes.forEach(function(d, i) {
       d.y = d.depth * 180;
       d.id = i + 1;
+      // I don't think the next two lines are quite right; they will need to change eventually.
+      d.x0 = d.x;
+      d.y0 = d.y;
+      // I added the following two properties.
+      d.rootX0 = rootX0;
+      d.rootY0 = rootY0;
     });
 
     var paths = [];
@@ -231,7 +238,6 @@ var renderTree = function(treeData, svgDomNode) {
       // nodes is an array of the child nodes of root. It looks like it also includes the root itself.
         links = tree.links(nodes);
         // links is an array with one element for each child.
-      console.log('nodes:', nodes);
       // console.log('links:', links);
 
       // Normalize for fixed-depth.
@@ -255,6 +261,8 @@ var renderTree = function(treeData, svgDomNode) {
         .on("click", click);
       // nodeEnter is a selection of newly appended <g> elements
       // It looks like node.enter() is pretty much the same thing, but with the addition of an update method we don't need.
+      console.log('nodes:', nodes);
+      console.log('nodeEnter:', nodeEnter);
 
       nodeEnter.append("circle")
         .attr("r", 1e-6)

@@ -5,6 +5,13 @@ var ReactDOM = require('react-dom');
 var treeVisualization = {};
 
 treeVisualization.enter = (selection) =>{
+  // I need to define source.
+  selection.attr("transform", function(d) {
+      // console.log('this', this); // this is the <g> element, not a node.
+      // console.log('selection', selection); // I think this is a node
+      return "translate(" + d.rootY0 + "," + d.rootX0 + ")"; })
+    // need to add onclick function
+
   selection.select("circle")
     .attr("r", 1e-6)
     // I checked, and this style is being applied!
@@ -16,6 +23,20 @@ treeVisualization.enter = (selection) =>{
     .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
     .text(function(d) { return d.name; })
     .style("fill-opacity", 1e-6);
+    // I think I just need to run the nodeUpdate and nodeExit stuff now. I've done nodeEnter.
+
+  // Transition nodes to their new position.
+  var duration = 450;
+  var transition = selection.transition()
+    .duration(duration)
+    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+  transition.select("circle")
+    .attr("r", 10)
+    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  transition.select("text")
+    .style("fill-opacity", 1);
 }
 
 export default class Tree extends Component {
@@ -47,7 +68,7 @@ export default class Tree extends Component {
 
   // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
   this.d3Node = d3.select(ReactDOM.findDOMNode(this));
-  this.d3Node.datum(this.props.data) // this is an array containing an array containing just the animation div
+  this.d3Node.datum(this.props.data)
     .call(treeVisualization.enter);
 
   // Do this stuff here? Or in helper function?
