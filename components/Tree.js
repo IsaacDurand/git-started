@@ -5,27 +5,13 @@ var ReactDOM = require('react-dom');
 var treeVisualization = {};
 
 treeVisualization.enter = (selection) =>{
-  console.log('in treeVisualization.enter');
-
-  // selection.selectAll("g .node")?
-  // When I changed .select to .selectAll, I get an 'undefined' error message, and no attributes are updated. Why is d undefined?
-
-  // console.log('select', selection.select('circle'));
-  // console.log('selectAll', selection.selectAll('circle')); // This seems kind of like what we want, so what's the problem?
-
   selection.select("circle")
     .attr("r", 1e-6)
     // I checked, and this style is being applied!
-    .style("fill", function(d) {
-      // console.log('select circle', this); // this is <circle>
-      console.log('select d', d);
-      return d._children ? "lightsteelblue" : "#fff"; });
+    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   selection.select("text")
-    .attr("x", function(d) {
-      // console.log('selectAll text', this); // this is <text>
-      // console.log('selectAll d', d); // Undefined
-      return d.children || d._children ? -13 : 13; })
+    .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
     .attr("dy", ".35em")
     .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
     .text(function(d) { return d.name; })
@@ -33,9 +19,31 @@ treeVisualization.enter = (selection) =>{
 }
 
 export default class Tree extends Component {
+  // BEGIN EXAMPLE code
+  // componentDidMount() {
+  //  // wrap element in d3
+  //  // getDOMNode is deprecated and has been replaced with ReactDOM.findDOMNode().
+  //  this.d3Node = d3.select(this.getDOMNode());
+  //  this.d3Node.datum(this.props.data)
+  //   .call(ExpenseVisualization.enter);
+  // }
+  // shouldComponentUpdate(nextProps) {
+  //  if (nextProps.data.update) {
+  //   // use d3 to update component
+  //   this.d3Node.datum(nextProps.data)
+  //    .call(ExpenseVisualization.update);
+  //   return false;
+  //  }
+  //  return true;
+  // },
+  // componentDidUpate() {
+  //  this.d3Node.datum(this.props.data)
+  //   .call(ExpenseVisualization.update);
+  // },
+  //END EXAMPLE code
 
   componentDidMount() {
-    console.log('in Tree.cDM');
+  // console.log(ReactDOM.findDOMNode(this)); // ReactDOM.findDOMNode(this) returns <g.Tree>
 
   // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
   this.d3Node = d3.select(ReactDOM.findDOMNode(this));

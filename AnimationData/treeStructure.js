@@ -1,5 +1,7 @@
 export default [
   {
+    "x0": 100,
+    "y0": 0,
     "name": "Top Level",
     "children": [
       {

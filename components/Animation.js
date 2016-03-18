@@ -19,35 +19,8 @@ export default class Animation extends Component {
     }
   }
 
-  // BEGIN EXAMPLE code
-  // componentDidMount() {
-  //  // wrap element in d3
-  //  // getDOMNode is deprecated and has been replaced with ReactDOM.findDOMNode().
-  //  this.d3Node = d3.select(this.getDOMNode());
-  //  this.d3Node.datum(this.props.data)
-  //   .call(ExpenseVisualization.enter);
-  // }
-  // shouldComponentUpdate(nextProps) {
-  //  if (nextProps.data.update) {
-  //   // use d3 to update component
-  //   this.d3Node.datum(nextProps.data)
-  //    .call(ExpenseVisualization.update);
-  //   return false;
-  //  }
-  //  return true;
-  // },
-  // componentDidUpate() {
-  //  this.d3Node.datum(this.props.data)
-  //   .call(ExpenseVisualization.update);
-  // },
-  //END EXAMPLE code
-
+  // Should we size the svg and main g here or earlier? This function is called after all the Tree.componentDidMounts.
   componentDidMount() {
-    // I'm using this.state here. This.props is the default props.
-    console.log('in Animation.cDM');
-    // console.log('this.state', this.state);
-    // console.log('this.props', this.props);
-
     // Can we use selection.select for these?
     // Update our svg's width and height.
     var svg = ReactDOM.findDOMNode(this.refs.ourSVG);
@@ -62,23 +35,34 @@ export default class Animation extends Component {
     d3.select(g)
       .attr("transform", "translate(" + this.state.margin.left + "," + this.state.margin.top + ")");
 
-    // ReactDOM.findDOMNode(this) returns <div#Animation>
-
     // We should avoid using findDOMNode if possible (https://facebook.github.io/react/docs/top-level-api.html), but it may be inevitable here.
   }
 
   render() {
-    console.log('in render');
+    // How do we set treeData[0].x0 and treeData[0].y0? I believe this needs to happen before render (I shouldn't modify state in render.)
+    // Right now, I'm manually setting these properties on treeStructure.js. In the future, I'll need to account for subsequent renders.
+    // treeData[0].x0: this.height / 2,
+    // treeData[0].y0: 0,
+
     // Create a tree layout of the specified size
     // (Does this mean we're creating a new tree on each render? I think it's OK to run these D3 functions since they're aren't creating or removing DOM elements.)
     // (Should we declare tree here or in this.state?)
     var tree = d3.layout.tree()
       .size([this.state.height, this.state.width]);
 
+    // Create diagonal?
+    var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
+
+    console.log('this.state', this.state);
+    console.log('this.state.treeData', this.state.treeData);
+    console.log('this.state.treeData[0]', this.state.treeData[0]);
+
     // Create an array of nodes. We will pass one node to each Tree as props.
-    var nodes = tree.nodes(this.state.treeData[0]).reverse().map(function(node, index) {
-      node.id = index + 1;
-      return node;
+    var nodes = tree.nodes(this.state.treeData[0]).reverse();
+    nodes.forEach(function(d, i) {
+      d.y = d.depth * 180;
+      d.id = i + 1;
     });
 
     var paths = [];
