@@ -8,7 +8,7 @@ var _ = require('lodash');
 
 // Note from Isaac: I think this blog post is what we're doing right now (I think we copied from it), and what we ideally want to avoid: http://javascript.tutorialhorizon.com/2014/09/08/render-a-d3js-tree-as-a-react-component/
 
-export default class Animation extends Component {
+class Animation extends Component {
 
   constructor(props) {
     super(props);
@@ -137,7 +137,7 @@ class V2Animation extends Component {
 }
 
 // This is the class we exported previously
-class V1Animation extends Component {
+export default class V1Animation extends Component {
 
   constructor(props) {
     super(props);
