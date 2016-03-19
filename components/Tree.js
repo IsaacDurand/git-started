@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 
 var treeVisualization = {};
 
-treeVisualization.enter = (selection) =>{
+treeVisualization.enter = (selection, duration) =>{
   // I need to define source.
   selection.attr("transform", function(d) {
       // console.log('this', this); // this is the <g> element, not a node.
@@ -26,7 +26,6 @@ treeVisualization.enter = (selection) =>{
     // I think I just need to run the nodeUpdate and nodeExit stuff now. I've done nodeEnter.
 
   // Transition nodes to their new position.
-  var duration = 450;
   var transition = selection.transition()
     .duration(duration)
     .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
@@ -69,7 +68,7 @@ export default class Tree extends Component {
   // Should I use a variable declaration in place of this.d3Node (as I'm doing below)?
   this.d3Node = d3.select(ReactDOM.findDOMNode(this));
   this.d3Node.datum(this.props.data)
-    .call(treeVisualization.enter);
+    .call(treeVisualization.enter, this.props.duration);
 
   // Do this stuff here? Or in helper function?
   // Set root.x0 and root.y0

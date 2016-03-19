@@ -4,19 +4,16 @@ var ReactDOM = require('react-dom');
 
 var linkVisualization = {};
 
-linkVisualization.enter = (selection, diagonal) => {
+linkVisualization.enter = (selection, diagonal, duration) => {
   selection.attr("d", function(d) {
   var o = {x: d.target.rootX0, y: d.target.rootY0};
   // console.log('this', this); // this is a <path>
   return diagonal({source: o, target: o});
   });
 
-  var duration = 450;
   selection.transition()
     .duration(duration)
     .attr("d", diagonal);
-
-  console.log('selection in lv.E', selection);
 }
 
 export default class Path extends Component {
@@ -46,7 +43,7 @@ export default class Path extends Component {
   componentDidMount() {
     this.d3Node = d3.select(ReactDOM.findDOMNode(this));
     this.d3Node.datum(this.props.data)
-      .call(linkVisualization.enter, this.props.diagonal);
+      .call(linkVisualization.enter, this.props.diagonal, this.props.duration);
   }
 
   // I think I want to use this.props.data.name instead of this.props.name...

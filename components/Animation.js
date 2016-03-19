@@ -45,6 +45,8 @@ export default class Animation extends Component {
     // treeData[0].x0: this.height / 2,
     // treeData[0].y0: 0,
 
+    var duration = 450;
+
     // Create a tree layout of the specified size
     // (Does this mean we're creating a new tree on each render? I think it's OK to run these D3 functions since they're aren't creating or removing DOM elements.)
     // (Should we declare tree here or in this.state?)
@@ -75,11 +77,11 @@ export default class Animation extends Component {
     });
 
     var links = linkSelection && linkSelection.map((link) => {
-      return (<Link key={link.target.id} data={link} diagonal={diagonal}/>)
+      return (<Link key={link.target.id} data={link} diagonal={diagonal} duration={duration} />)
     });
 
     var trees = nodes && nodes.map((node) => {
-      return (<Tree key={node.id} data={node} />)
+      return (<Tree key={node.id} data={node} duration={duration} />)
     });
 
     return(
