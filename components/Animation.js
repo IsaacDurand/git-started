@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import treeData from './../AnimationData/treeStructure';
 import Tree from './Tree';
+import Link from './Link';
 var d3 = require('d3');
 var ReactDOM = require('react-dom');
 var _ = require('lodash');
@@ -56,7 +57,7 @@ export default class Animation extends Component {
 
     // Create an array of nodes. We will pass one node to each Tree as props.
     var nodes = tree.nodes(this.state.treeData[0]).reverse(),
-      links = tree.links(nodes);
+      linkSelection = tree.links(nodes);
 
     var root = nodes[nodes.length - 1];
     var rootX0 = root.x;
@@ -73,10 +74,10 @@ export default class Animation extends Component {
       d.rootY0 = rootY0;
     });
 
-    var paths = links && links.map((link) => {
-      return (<Path key={link.target.id} data={link} />)
+    var links = linkSelection && linkSelection.map((link) => {
+      return (<Link key={link.target.id} data={link} />)
     });
-    
+
     var trees = nodes && nodes.map((node) => {
       return (<Tree key={node.id} data={node} />)
     });
@@ -85,7 +86,7 @@ export default class Animation extends Component {
       <div id='Animation'>
         <svg ref='ourSVG'>
           <g ref='ourMainG'>
-            {paths}
+            {links}
             {trees}
           </g>
         </svg>
