@@ -75,7 +75,7 @@ export default class Animation extends Component {
     });
 
     var links = linkSelection && linkSelection.map((link) => {
-      return (<Link key={link.target.id} data={link} />)
+      return (<Link key={link.target.id} data={link} diagonal={diagonal}/>)
     });
 
     var trees = nodes && nodes.map((node) => {
